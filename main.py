@@ -5,8 +5,8 @@ import google.generativeai as genai
 from aiogram import Bot, Dispatcher, executor, types
 
 # 1. Получаем ключи из настроек сервера (Environment Variables)
-TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+TELEGRAM_TOKEN = "8571468939:AAGPUiMi8IjEp9F4qT0BxWGHbMDO_6rUNUo"
+GEMINI_API_KEY = "AIzaSyCgWuxijS6eKvxlROp_JaYKkE7xZCmRgks"
 
 # 2. Настраиваем логирование, чтобы видеть ошибки в консоли
 logging.basicConfig(level=logging.INFO)
