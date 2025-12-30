@@ -1,15 +1,17 @@
+import os
 import logging
 import google.generativeai as genai
 from aiogram import Bot, Dispatcher, executor, types
 
-# ТВОИ ДАННЫЕ
-TOKEN = "8571468939:AAGPUiMi8IjEp9F4qT0BxWGHbMDO_6rUNUo"
-API_KEY = "AIzaSyBhNWGjlvO_7cNjHwSBza7XIaMlicASKsA"
+# Получаем ключи из переменных окружения
+TOKEN = os.getenv("TELEGRAM_TOKEN")
+API_KEY = os.getenv("GEMINI_API_KEY")
 
 logging.basicConfig(level=logging.INFO)
 
-# Инициализация
+# Правильная настройка модели
 genai.configure(api_key=API_KEY)
+# Используем просто "gemini-1.5-flash" без лишних префиксов
 model = genai.GenerativeModel('gemini-1.5-flash')
 
 bot = Bot(token=TOKEN)
@@ -17,25 +19,18 @@ dp = Dispatcher(bot)
 
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
-    await message.answer("Бот обновлен! Напиши что-нибудь.")
+    await message.answer("Система обновлена! Напиши мне что-нибудь.")
 
 @dp.message_handler()
 async def chat(message: types.Message):
     try:
-        # Пытаемся получить ответ самым простым способом
         response = model.generate_content(message.text)
-        
-        # Выводим ответ
         if response.text:
             await message.answer(response.text)
         else:
-            await message.answer("Пустой ответ от ИИ.")
-            
+            await message.answer("ИИ вернул пустой ответ.")
     except Exception as e:
-        # Бот напишет точный текст ошибки прямо тебе в чат!
-        error_message = f"❌ Ошибка: {str(e)}"
-        logging.error(error_message)
-        await message.answer(error_message)
+        await message.answer(f"❌ Ошибка: {str(e)}")
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
